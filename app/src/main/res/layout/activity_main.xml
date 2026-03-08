@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    LinearLayout with vertical orientation stacks its children top-to-bottom.
+    Each child occupies its own "row". This is the simplest layout for demos.
+-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="top">
+
+    <!--
+        ImageView: shows a drawable.
+        - android:src sets the image statically in XML
+        - We also set it in code via ivLogo.setImageResource(...)
+        - layout_gravity="center_horizontal" centers it within the parent's row
+    -->
+    <ImageView
+        android:id="@+id/ivLogo"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/ic_launcher_foreground"
+        android:background="@color/purple_500"
+        android:contentDescription="App logo"
+        android:layout_marginBottom="16dp" />
+
+    <!--
+        TextView: read-only label.
+        - wrap_content means the view is only as tall as its text.
+        - sp (scale-independent pixels) for text size: respects user font-size setting.
+    -->
+    <TextView
+        android:id="@+id/tvGreeting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/label_greeting"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:layout_marginBottom="12dp" />
+
+    <!--
+        EditText: a text input field.
+        - hint is the grey placeholder text shown when the field is empty.
+        - inputType="textPersonName" tells the keyboard to show letters.
+    -->
+    <EditText
+        android:id="@+id/etName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_name"
+        android:inputType="textPersonName"
+        android:layout_marginBottom="8dp" />
+
+    <!--
+        Button: the most common interactive widget.
+        - Tapping it fires the setOnClickListener lambda we set in Kotlin.
+    -->
+    <Button
+        android:id="@+id/btnGreet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_greet" />
+
+    <!-- Visual separator — just a thin horizontal line -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#DDDDDD"
+        android:layout_marginVertical="24dp" />
+
+    <!-- Counter section: shows how many times the button was pressed -->
+    <TextView
+        android:id="@+id/tvCounter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/label_counter"
+        android:textSize="24sp"
+        android:gravity="center"
+        android:layout_marginBottom="12dp" />
+
+    <Button
+        android:id="@+id/btnCounter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_click" />
+
+</LinearLayout>
