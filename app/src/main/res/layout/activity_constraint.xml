@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    ╔══════════════════════════════════════╗
+    ║       CONSTRAINT LAYOUT DEMO         ║
+    ╚══════════════════════════════════════╝
+
+    ConstraintLayout: positions views using *constraint* rules — each edge of a
+    view can be "tied" to another view's edge, or to the parent boundary.
+
+    Why use it?
+      • Flat hierarchy (no nested layouts needed)
+      • Easily handles complex positioning
+      • Preferred by Android Studio's visual editor
+
+    Key rule: every view needs at least ONE horizontal and ONE vertical constraint,
+    otherwise it defaults to position (0,0) — the top-left corner.
+
+    app:layout_constraint[SourceEdge]_to[TargetEdge]Of="[viewId|parent]"
+
+    Examples:
+      app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        → this view's Top edge is glued to tvTitle's Bottom edge
+
+      app:layout_constraintStart_toStartOf="parent"
+        → this view's Start (left) aligns with the parent's Start
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <!--
+        Title: horizontally centered, pinned to the top of the parent
+        Constraints: Start→parent Start, End→parent End, Top→parent Top
+    -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ConstraintLayout Demo"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="24dp" />
+
+    <!--
+        Blue box: centered horizontally, placed 32dp below the title.
+        Top is constrained to tvTitle's bottom.
+    -->
+    <View
+        android:id="@+id/viewBlue"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:background="#FF1E88E5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        android:layout_marginTop="32dp" />
+
+    <!--
+        Left label: start-aligned with parent, centered vertically to the blue box.
+        Its End is constrained to viewBlue's Start.
+    -->
+    <TextView
+        android:id="@+id/tvLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Left"
+        android:textColor="#FFE53935"
+        app:layout_constraintEnd_toStartOf="@id/viewBlue"
+        app:layout_constraintTop_toTopOf="@id/viewBlue"
+        app:layout_constraintBottom_toBottomOf="@id/viewBlue"
+        android:layout_marginEnd="8dp" />
+
+    <!--
+        Right label: same idea but mirrored.
+        Its Start is constrained to viewBlue's End.
+    -->
+    <TextView
+        android:id="@+id/tvRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Right"
+        android:textColor="#FF43A047"
+        app:layout_constraintStart_toEndOf="@id/viewBlue"
+        app:layout_constraintTop_toTopOf="@id/viewBlue"
+        app:layout_constraintBottom_toBottomOf="@id/viewBlue"
+        android:layout_marginStart="8dp" />
+
+    <!--
+        Bottom button: pinned to the bottom of the screen.
+        Top→viewBlue Bottom (loose), Bottom→parent Bottom (tight).
+    -->
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Constraints keep me at the bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

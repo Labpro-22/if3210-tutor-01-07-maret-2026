@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Tutor</string>
-    <string name="hint_name">Enter your name</string>
-    <string name="btn_greet">Greet Me</string>
-    <string name="btn_click">Click Me!</string>
-    <string name="label_greeting">Press the button to greet!</string>
-    <string name="label_counter">Clicked: 0</string>
-    <string name="clicked">Clicked: %1$d</string>
+    <string name="btn_linear">LinearLayout Demo</string>
+    <string name="btn_frame">FrameLayout Demo</string>
+    <string name="btn_constraint">ConstraintLayout Demo</string>
 </resources>

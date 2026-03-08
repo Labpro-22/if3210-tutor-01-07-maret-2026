@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    ╔══════════════════════════════════════╗
+    ║          FRAME LAYOUT DEMO           ║
+    ╚══════════════════════════════════════╝
+
+    FrameLayout: draws children *on top of each other* (like layers in Photoshop).
+    The first child is drawn first (bottom layer); the last child is on top.
+
+    Common uses:
+      • Loading spinner overlaid on content
+      • Badge counter on top of an icon
+      • Fragments inside a container
+
+    layout_gravity controls where each child sits *within* the FrameLayout.
+-->
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Layer 1 (bottom): full-screen background color -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFE3F2FD" />
+
+    <!-- Layer 2: a large circle in the centre -->
+    <View
+        android:layout_width="240dp"
+        android:layout_height="240dp"
+        android:background="@drawable/ic_launcher_background"
+        android:layout_gravity="center" />
+
+    <!-- Layer 3: a smaller box, also centered, overlapping the circle -->
+    <View
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="#FFFFB300"
+        android:layout_gravity="center" />
+
+    <!-- Layer 4 (top): a label pinned to bottom-center -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Views overlap in FrameLayout"
+        android:textSize="16sp"
+        android:textColor="#FF000000"
+        android:padding="8dp"
+        android:background="#CCFFFFFF"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="32dp" />
+
+</FrameLayout>

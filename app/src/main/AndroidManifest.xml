@@ -9,14 +9,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tutor">
 
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
+        <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Each layout demo runs in its own Activity -->
+        <activity android:name=".LinearDemoActivity" android:exported="false" />
+        <activity android:name=".FrameDemoActivity" android:exported="false" />
+        <activity android:name=".ConstraintDemoActivity" android:exported="false" />
 
     </application>
 
