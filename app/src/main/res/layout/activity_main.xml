@@ -1,108 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Uses @dimen/ references so that all spacing/sizes come from dimens.xml.
-    Try changing a value in dimens.xml and see it update everywhere.
+    ╔══════════════════════════════════════════════════════════╗
+    ║                  ACCESSIBILITY DEMO                      ║
+    ╚══════════════════════════════════════════════════════════╝
+
+    How to test with TalkBack:
+      Settings → Accessibility → TalkBack → Turn on
+      Then navigate using swipes; single tap to focus, double-tap to activate.
 -->
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="32dp">
 
-    <LinearLayout
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Layout Demos"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="32dp" />
+
+    <Button
+        android:id="@+id/btnLinear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/screen_padding">
+        android:padding="24dp">
 
-        <!-- ── Section title ── -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/title_resources"
-            android:textSize="@dimen/text_title"
+            android:text="@string/title_accessibility"
+            android:textSize="22sp"
             android:textStyle="bold"
-            android:layout_marginBottom="@dimen/section_spacing" />
+            android:layout_marginBottom="24dp" />
 
         <!-- ══════════════════════════════════════
-             DRAWABLE RESOURCE
-             R.drawable.ic_sample → res/drawable/ic_sample.xml
-             ══════════════════════════════════════ -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_image_section"
-            android:textSize="@dimen/text_body"
-            android:textStyle="bold" />
-
-        <!--
-            android:src="@drawable/ic_sample" sets the image in XML.
-            We also set it in code with setImageResource(R.drawable.ic_sample)
-            to show both ways.
+             ImageView with contentDescription
+             ══════════════════════════════════════
+             Without contentDescription, TalkBack says "unlabelled image".
+             With it, TalkBack says: "Application logo — a yellow star, image"
         -->
         <ImageView
-            android:id="@+id/ivStar"
-            android:layout_width="@dimen/icon_size"
-            android:layout_height="@dimen/icon_size"
+            android:id="@+id/ivLogo"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center_horizontal"
             android:src="@drawable/ic_sample"
-            android:contentDescription="@string/desc_star"
-            android:layout_marginTop="@dimen/item_spacing"
-            android:layout_marginBottom="@dimen/section_spacing" />
+            android:contentDescription="@string/cd_logo"
+            android:layout_marginBottom="24dp" />
 
         <!-- ══════════════════════════════════════
-             STRING RESOURCE
-             R.string.msg_string_resource → strings.xml
-             ══════════════════════════════════════ -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_string_section"
-            android:textSize="@dimen/text_body"
-            android:textStyle="bold" />
-
-        <!-- Text is set from code via getString(R.string.msg_string_resource) -->
-        <TextView
-            android:id="@+id/tvStringDemo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/text_body"
-            android:background="#FFF3E0"
-            android:padding="@dimen/item_spacing"
-            android:layout_marginTop="@dimen/item_spacing"
-            android:layout_marginBottom="@dimen/section_spacing" />
-
-        <!-- ══════════════════════════════════════
-             DIMEN RESOURCE
-             R.dimen.screen_padding → dimens.xml
-             ══════════════════════════════════════ -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_dimen_section"
-            android:textSize="@dimen/text_body"
-            android:textStyle="bold" />
-
-        <!-- Text is set in code to show the dimen value in px -->
-        <TextView
-            android:id="@+id/tvDimenDemo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/text_body"
-            android:background="#E8F5E9"
-            android:padding="@dimen/item_spacing"
-            android:layout_marginTop="@dimen/item_spacing"
-            android:layout_marginBottom="@dimen/section_spacing" />
-
-        <!--
-            This view uses @dimen values for padding AND textSize directly in XML,
-            demonstrating that dimens.xml can be used anywhere a size is needed.
+             labelFor — linking a label to an input
+             ══════════════════════════════════════
+             android:labelFor="@id/etName" tells TalkBack:
+             "When the user focuses etName, read tvNameLabel first"
+             So TalkBack says: "Your name — edit box"
+             instead of just "edit box" (unhelpful).
         -->
         <TextView
+            android:id="@+id/tvNameLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_name"
+            android:textSize="16sp"
+            android:labelFor="@id/etName" />
+
+        <EditText
+            android:id="@+id/etName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/sample_padded_text"
-            android:padding="@dimen/screen_padding"
-            android:textSize="@dimen/text_body"
-            android:background="#E3F2FD" />
+            android:hint="@string/hint_name"
+            android:inputType="textPersonName"
+            android:layout_marginBottom="12dp" />
+
+        <!--
+            Button with explicit contentDescription.
+            TalkBack reads: "Submit button — sends your name, button"
+            Without it, TalkBack would just say: "Submit, button"
+        -->
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_submit"
+            android:contentDescription="@string/cd_submit"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/btnAnnounce"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_announce"
+            android:layout_marginBottom="24dp" />
+
+        <!-- ══════════════════════════════════════
+             accessibilityLiveRegion
+             ══════════════════════════════════════
+             accessibilityLiveRegion="polite" tells TalkBack to
+             automatically re-read this TextView whenever its text changes —
+             without the user having to focus on it again.
+
+             "polite"  → waits for current speech to finish, then announces
+             "assertive" → interrupts current speech immediately (use sparingly)
+             "none"    → default; TalkBack won't re-read on change
+        -->
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_live_region"
+            android:textSize="18sp"
+            android:padding="12dp"
+            android:background="#E8F5E9"
+            android:accessibilityLiveRegion="polite" />
 
     </LinearLayout>
 </ScrollView>

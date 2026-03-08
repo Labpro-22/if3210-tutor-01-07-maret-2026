@@ -1,28 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    res/values/strings.xml — centralises ALL user-visible text.
-
-    WHY store strings here instead of hard-coding them in layout XML or Kotlin?
-      1. Localisation: copy this file to res/values-id/ and translate to Bahasa Indonesia
-         — Android picks the right file automatically based on device language.
-      2. Consistency: change a label once here, it updates everywhere.
-      3. No magic strings scattered through code.
-
-    In Kotlin:  getString(R.string.app_name)  or  resources.getString(R.string.app_name)
-    In XML:     android:text="@string/title_resources"
--->
 <resources>
     <string name="app_name">Tutor</string>
 
-    <!-- Screen labels -->
-    <string name="title_resources">03 — Resources</string>
-    <string name="label_image_section">Drawable Resource</string>
-    <string name="label_string_section">String Resource</string>
-    <string name="label_dimen_section">Dimen Resource</string>
+    <!-- Labels visible on screen -->
+    <string name="title_accessibility">04 — Accessibility</string>
+    <string name="label_name">Your name</string>
+    <string name="hint_name">Enter your name</string>
+    <string name="btn_submit">Submit</string>
+    <string name="btn_announce">Announce greeting</string>
+    <string name="label_live_region">Status will appear here</string>
 
-    <!-- Content shown to the user -->
-    <string name="desc_star">A yellow star loaded from res/drawable/ic_sample.xml</string>
-    <string name="msg_string_resource">This text comes from res/values/strings.xml.\nKey: R.string.msg_string_resource</string>
-    <string name="msg_dimen_resource">The padding and text size below are from res/values/dimens.xml.</string>
-    <string name="sample_padded_text">I use dimensions from dimens.xml!</string>
+    <!-- contentDescription for non-text views (read aloud by TalkBack) -->
+    <string name="cd_logo">Application logo — a yellow star</string>
+    <string name="cd_submit">Submit button — sends your name</string>
 </resources>
