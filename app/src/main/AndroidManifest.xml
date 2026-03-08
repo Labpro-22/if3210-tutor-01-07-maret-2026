@@ -16,11 +16,6 @@
             </intent-filter>
         </activity>
 
-        <!-- Each layout demo runs in its own Activity -->
-        <activity android:name=".LinearDemoActivity" android:exported="false" />
-        <activity android:name=".FrameDemoActivity" android:exported="false" />
-        <activity android:name=".ConstraintDemoActivity" android:exported="false" />
-
     </application>
 
 </manifest>

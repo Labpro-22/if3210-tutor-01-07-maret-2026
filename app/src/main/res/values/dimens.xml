@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    res/values/dimens.xml — stores size values used across the app.
+
+    Unit reference:
+    ┌──────┬───────────────────────────────────────────────────────────────┐
+    │  px  │ Raw screen pixel. AVOID — counts differ per device density.   │
+    │  dp  │ Density-independent pixel. 1 dp = 1 px at 160 dpi (mdpi).    │
+    │      │ On a 320 dpi screen, 1 dp = 2 px automatically.              │
+    │      │ USE dp for all margins, paddings, widths, heights.            │
+    │  sp  │ Scale-independent pixel. Like dp, but ALSO respects the       │
+    │      │ user's "Font size" setting in Accessibility preferences.      │
+    │      │ USE sp ONLY for text sizes (android:textSize).               │
+    └──────┴───────────────────────────────────────────────────────────────┘
+
+    Rule of thumb:
+      • Sizes / spacing / layout → dp
+      • Text sizes              → sp
+      • NEVER use px            → px
+-->
+<resources>
+    <!-- Spacing -->
+    <dimen name="screen_padding">16dp</dimen>
+    <dimen name="section_spacing">24dp</dimen>
+    <dimen name="item_spacing">8dp</dimen>
+
+    <!-- Text sizes (sp — scales with user font preference) -->
+    <dimen name="text_title">22sp</dimen>
+    <dimen name="text_body">16sp</dimen>
+    <dimen name="text_caption">12sp</dimen>
+
+    <!-- Widget sizes -->
+    <dimen name="icon_size">80dp</dimen>
+</resources>

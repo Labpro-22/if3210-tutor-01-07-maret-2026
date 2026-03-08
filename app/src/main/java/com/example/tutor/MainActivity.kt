@@ -1,39 +1,49 @@
 package com.example.tutor
 
-import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 /**
- * Branch 02 — Layouts
+ * Branch 03 — Resources
  *
- * This screen is a "menu" that lets you open three separate
- * activities, each demonstrating a different layout type.
+ * Android organises non-code assets in the res/ folder.
+ * The build system generates a class called R (in your package) that gives you
+ * compile-time references to every resource:
  *
- * Android has many layout containers; the three most important ones for
- * beginners are:
- *   • LinearLayout   — arrange views in a single row or column
- *   • FrameLayout    — stack views on top of each other (like layers)
- *   • ConstraintLayout — position views using rules ("constraints")
+ *   R.drawable.ic_sample      → res/drawable/ic_sample.xml
+ *   R.string.app_name         → res/values/strings.xml  <string name="app_name">
+ *   R.dimen.screen_padding    → res/values/dimens.xml   <dimen name="screen_padding">
+ *   R.id.ivStar               → the view with android:id="@+id/ivStar" in a layout
+ *   R.layout.activity_main    → res/layout/activity_main.xml
+ *   R.color.purple_500        → res/values/colors.xml   <color name="purple_500">
+ *
+ * Using R keeps everything type-safe and refactor-friendly — the compiler will
+ * catch a missing resource at build time rather than crashing at runtime.
  */
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main)  // R.layout reference
 
-        // Each button starts a different Activity to show one layout type
-        findViewById<Button>(R.id.btnLinear).setOnClickListener {
-            startActivity(Intent(this, LinearDemoActivity::class.java))
-        }
+        // ── Drawable resource ──────────────────────────────────────────────
+        val ivStar: ImageView = findViewById(R.id.ivStar)  // R.id reference
+        // R.drawable.ic_sample resolves to res/drawable/ic_sample.xml
+        ivStar.setImageResource(R.drawable.ic_sample)
 
-        findViewById<Button>(R.id.btnFrame).setOnClickListener {
-            startActivity(Intent(this, FrameDemoActivity::class.java))
-        }
+        // ── String resource ────────────────────────────────────────────────
+        val tvStringDemo: TextView = findViewById(R.id.tvStringDemo)
+        // getString() fetches the value from res/values/strings.xml at runtime
+        tvStringDemo.text = getString(R.string.msg_string_resource)
 
-        findViewById<Button>(R.id.btnConstraint).setOnClickListener {
-            startActivity(Intent(this, ConstraintDemoActivity::class.java))
-        }
+        // ── Dimen resource ─────────────────────────────────────────────────
+        val tvDimenDemo: TextView = findViewById(R.id.tvDimenDemo)
+        // resources.getDimension() returns the dimen value in pixels (already scaled)
+        // We display it here just to show the concept
+        val paddingPx = resources.getDimension(R.dimen.screen_padding)
+        tvDimenDemo.text = "screen_padding = ${paddingPx.toInt()} px on this device\n" +
+                "(defined as 16dp in dimens.xml)"
     }
 }
