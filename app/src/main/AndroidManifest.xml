@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!--
+        READ_CONTACTS is a "dangerous" permission — it must be declared here AND
+        requested at runtime (the user sees a dialog asking to Allow/Deny).
+        Declaring it here is not enough on its own.
+    -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,16 +22,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!--
-            SecondActivity must be declared here.
-            android:exported="false" → only our app can start it (no deep links).
-            android:parentActivityName → enables the Up (←) button in the ActionBar.
-        -->
-        <activity
-            android:name=".SecondActivity"
-            android:exported="false"
-            android:parentActivityName=".MainActivity" />
 
     </application>
 

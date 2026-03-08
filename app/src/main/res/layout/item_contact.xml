@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    item_contact.xml — inflated once per visible slot in the RecyclerView.
+
+    CardView gives the item a material card look:
+      - elevation: shadow depth
+      - cardCornerRadius: rounded corners
+      - cardBackgroundColor: card surface colour
+
+    This file is inflated in ContactsAdapter.onCreateViewHolder().
+-->
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginVertical="4dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <!-- Contact name — larger, bold -->
+        <TextView
+            android:id="@+id/tvContactName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#212121" />
+
+        <!-- Phone number — smaller, grey -->
+        <TextView
+            android:id="@+id/tvContactPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="#757575"
+            android:layout_marginTop="2dp" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

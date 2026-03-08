@@ -1,71 +1,144 @@
 package com.example.tutor
 
-import android.content.Intent
-import android.net.Uri
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
+import android.provider.ContactsContract
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 /**
- * Branch 05 — Activities and Intents
+ * Branch 06 — Content Provider
  *
- * An Intent is a message object that describes an operation to perform.
- * Two kinds:
+ * A ContentProvider is Android's mechanism for sharing structured data between apps.
+ * The OS ships with several built-in providers:
+ *   • ContactsContract  — device contacts
+ *   • MediaStore        — photos, videos, audio
+ *   • CalendarContract  — calendar events
  *
- * ① Explicit Intent — you name the exact class to start.
- *   Used to navigate between screens in YOUR OWN app.
- *   Example: start SecondActivity and hand it the user's name.
+ * To read data you use contentResolver.query(), which works like a SQL SELECT.
+ * It returns a Cursor — an iterator over the result rows.
  *
- * ② Implicit Intent — you describe the ACTION and data, and Android
- *   picks the right app to handle it (email client, browser, maps, …).
- *   Your app doesn't need to know which app handles it.
- *
- * Step 5a: Explicit intent → SecondActivity
- * Step 5b: Implicit intent → email client
+ * Runtime permissions (Android 6.0 / API 23+):
+ *   Sensitive permissions ("dangerous" group) must be granted by the user at runtime.
+ *   READ_CONTACTS is one of these — we must:
+ *     1. Declare it in AndroidManifest.xml (install-time)
+ *     2. Check if it's already granted (ContextCompat.checkSelfPermission)
+ *     3. Request it if not granted (registerForActivityResult with RequestPermission)
+ *     4. React to the user's Allow/Deny response
  */
 class MainActivity : AppCompatActivity() {
 
-    // Key used to attach/retrieve the extra — define it as a constant to avoid typos
-    companion object {
-        const val EXTRA_NAME = "com.example.tutor.EXTRA_NAME"
-    }
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: ContactsAdapter
+
+    // Modern way to request a single permission — replaces the old
+    // requestPermissions() + onRequestPermissionsResult() pattern
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                // User pressed Allow — load contacts now
+                loadContacts()
+            } else {
+                // User pressed Deny
+                Toast.makeText(this, "Permission denied — cannot read contacts.", Toast.LENGTH_LONG).show()
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val etName: EditText = findViewById(R.id.etName)
+        // Set up RecyclerView with an empty list; we'll fill it after permission is granted
+        adapter = ContactsAdapter(emptyList())
+        recyclerView = findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
 
-        // ── 5a: Explicit Intent ────────────────────────────────────────────
-        findViewById<Button>(R.id.btnOpenSecond).setOnClickListener {
-            // Create an intent that explicitly targets SecondActivity
-            val intent = Intent(this, SecondActivity::class.java)
+        checkAndLoadContacts()
+    }
 
-            // Attach data using putExtra(key, value)
-            // The key is just a string; using a package-qualified name avoids collisions
-            intent.putExtra(EXTRA_NAME, etName.text.toString().trim())
+    private fun checkAndLoadContacts() {
+        when {
+            // Permission was already granted (e.g. user allowed it before)
+            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
+                    == PackageManager.PERMISSION_GRANTED -> {
+                loadContacts()
+            }
 
-            // Start the activity — Android pushes SecondActivity onto the back stack
-            startActivity(intent)
+            // Android recommends showing a rationale if the user previously denied
+            shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS) -> {
+                Toast.makeText(
+                    this,
+                    "Contacts permission is needed to display your contacts list.",
+                    Toast.LENGTH_LONG
+                ).show()
+                requestPermissionLauncher.launch(Manifest.permission.READ_CONTACTS)
+            }
+
+            // First time asking — just show the system dialog
+            else -> {
+                requestPermissionLauncher.launch(Manifest.permission.READ_CONTACTS)
+            }
+        }
+    }
+
+    /**
+     * Query the contacts ContentProvider and return a list of (name, phone) pairs.
+     *
+     * ContentResolver.query() parameters:
+     *   uri         — which table to query (like a table name in SQL)
+     *   projection  — which columns to return (like SELECT columns)
+     *   selection   — WHERE clause (null = no filter)
+     *   selectionArgs — values for ? placeholders in selection
+     *   sortOrder   — ORDER BY clause
+     */
+    private fun loadContacts() {
+        val contacts = mutableListOf<Contact>()
+
+        // The URI for the phone number table
+        val uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
+
+        // We only need name and phone — fetching all columns is wasteful
+        val projection = arrayOf(
+            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+            ContactsContract.CommonDataKinds.Phone.NUMBER
+        )
+
+        // contentResolver is provided by the Activity; it routes the query to the
+        // correct ContentProvider (the Contacts app in this case)
+        val cursor = contentResolver.query(
+            uri,
+            projection,
+            null,   // no WHERE filter
+            null,
+            "${ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME} ASC"  // sort A→Z
+        )
+
+        // Cursor works like an iterator — move to each row and read columns by index
+        cursor?.use { c ->
+            val nameIndex   = c.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
+            val numberIndex = c.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER)
+
+            while (c.moveToNext()) {
+                contacts.add(
+                    Contact(
+                        name   = c.getString(nameIndex),
+                        phone  = c.getString(numberIndex)
+                    )
+                )
+            }
         }
 
-        // ── 5b: Implicit Intent — email ────────────────────────────────────
-        findViewById<Button>(R.id.btnEmail).setOnClickListener {
-            // ACTION_SENDTO + "mailto:" URI targets email clients specifically.
-            // (ACTION_SEND would also match Bluetooth, messaging apps, etc.)
-            val intent = Intent(Intent.ACTION_SENDTO).apply {
-                data = Uri.parse("mailto:")                   // only email apps handle this
-                putExtra(Intent.EXTRA_EMAIL, arrayOf("lecturer@university.ac.id"))
-                putExtra(Intent.EXTRA_SUBJECT, "Android Tutorial Question")
-                putExtra(Intent.EXTRA_TEXT, "Hi,\n\nI have a question about the Android tutorial.\n\nRegards,\n${etName.text}")
-            }
+        // Hand the list to the adapter — it will tell RecyclerView to redraw
+        adapter.updateContacts(contacts)
 
-            // resolveActivity checks whether ANY app can handle this intent
-            // before we call startActivity() — avoids a crash if no email app is installed
-            if (intent.resolveActivity(packageManager) != null) {
-                startActivity(intent)
-            }
+        if (contacts.isEmpty()) {
+            Toast.makeText(this, "No contacts found on this device.", Toast.LENGTH_SHORT).show()
         }
     }
 }

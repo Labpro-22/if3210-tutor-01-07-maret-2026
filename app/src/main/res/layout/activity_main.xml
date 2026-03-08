@@ -3,39 +3,31 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="24dp">
+    android:orientation="vertical">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="05 — Intents"
-        android:textSize="22sp"
+        android:text="06 — Contacts (ContentProvider)"
+        android:textSize="18sp"
         android:textStyle="bold"
-        android:layout_marginBottom="32dp" />
+        android:padding="16dp"
+        android:background="@color/purple_500"
+        android:textColor="@color/white" />
 
-    <EditText
-        android:id="@+id/etName"
+    <!--
+        RecyclerView: efficient scrollable list.
+        - match_parent on both dimensions so it fills remaining space.
+        - The LayoutManager (set in code) decides how items are arranged.
+          LinearLayoutManager → vertical list (like ListView)
+          GridLayoutManager   → grid
+    -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter your name"
-        android:inputType="textPersonName"
-        android:layout_marginBottom="16dp" />
-
-    <!-- 5a: Explicit Intent — opens SecondActivity in this same app -->
-    <Button
-        android:id="@+id/btnOpenSecond"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Open Second Activity (Explicit Intent)"
-        android:layout_marginBottom="12dp" />
-
-    <!-- 5b: Implicit Intent — Android picks the installed email app -->
-    <Button
-        android:id="@+id/btnEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Open Email Client (Implicit Intent)" />
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp" />
 
 </LinearLayout>
