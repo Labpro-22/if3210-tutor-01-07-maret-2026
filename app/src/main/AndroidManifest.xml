@@ -16,6 +16,16 @@
             </intent-filter>
         </activity>
 
+        <!--
+            SecondActivity must be declared here.
+            android:exported="false" → only our app can start it (no deep links).
+            android:parentActivityName → enables the Up (←) button in the ActionBar.
+        -->
+        <activity
+            android:name=".SecondActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+
     </application>
 
 </manifest>

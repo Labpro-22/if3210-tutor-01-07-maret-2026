@@ -1,16 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Tutor</string>
-
-    <!-- Labels visible on screen -->
-    <string name="title_accessibility">04 — Accessibility</string>
-    <string name="label_name">Your name</string>
-    <string name="hint_name">Enter your name</string>
-    <string name="btn_submit">Submit</string>
-    <string name="btn_announce">Announce greeting</string>
-    <string name="label_live_region">Status will appear here</string>
-
-    <!-- contentDescription for non-text views (read aloud by TalkBack) -->
-    <string name="cd_logo">Application logo — a yellow star</string>
-    <string name="cd_submit">Submit button — sends your name</string>
 </resources>

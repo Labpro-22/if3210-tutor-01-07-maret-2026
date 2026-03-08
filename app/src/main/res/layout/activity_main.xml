@@ -1,123 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    ╔══════════════════════════════════════════════════════════╗
-    ║                  ACCESSIBILITY DEMO                      ║
-    ╚══════════════════════════════════════════════════════════╝
-
-    How to test with TalkBack:
-      Settings → Accessibility → TalkBack → Turn on
-      Then navigate using swipes; single tap to focus, double-tap to activate.
--->
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="32dp">
+    android:padding="24dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Layout Demos"
-        android:textSize="24sp"
+        android:text="05 — Intents"
+        android:textSize="22sp"
         android:textStyle="bold"
         android:layout_marginBottom="32dp" />
 
-    <Button
-        android:id="@+id/btnLinear"
+    <EditText
+        android:id="@+id/etName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp">
+        android:hint="Enter your name"
+        android:inputType="textPersonName"
+        android:layout_marginBottom="16dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/title_accessibility"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="24dp" />
+    <!-- 5a: Explicit Intent — opens SecondActivity in this same app -->
+    <Button
+        android:id="@+id/btnOpenSecond"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Open Second Activity (Explicit Intent)"
+        android:layout_marginBottom="12dp" />
 
-        <!-- ══════════════════════════════════════
-             ImageView with contentDescription
-             ══════════════════════════════════════
-             Without contentDescription, TalkBack says "unlabelled image".
-             With it, TalkBack says: "Application logo — a yellow star, image"
-        -->
-        <ImageView
-            android:id="@+id/ivLogo"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/ic_sample"
-            android:contentDescription="@string/cd_logo"
-            android:layout_marginBottom="24dp" />
+    <!-- 5b: Implicit Intent — Android picks the installed email app -->
+    <Button
+        android:id="@+id/btnEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Open Email Client (Implicit Intent)" />
 
-        <!-- ══════════════════════════════════════
-             labelFor — linking a label to an input
-             ══════════════════════════════════════
-             android:labelFor="@id/etName" tells TalkBack:
-             "When the user focuses etName, read tvNameLabel first"
-             So TalkBack says: "Your name — edit box"
-             instead of just "edit box" (unhelpful).
-        -->
-        <TextView
-            android:id="@+id/tvNameLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_name"
-            android:textSize="16sp"
-            android:labelFor="@id/etName" />
-
-        <EditText
-            android:id="@+id/etName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_name"
-            android:inputType="textPersonName"
-            android:layout_marginBottom="12dp" />
-
-        <!--
-            Button with explicit contentDescription.
-            TalkBack reads: "Submit button — sends your name, button"
-            Without it, TalkBack would just say: "Submit, button"
-        -->
-        <Button
-            android:id="@+id/btnSubmit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/btn_submit"
-            android:contentDescription="@string/cd_submit"
-            android:layout_marginBottom="8dp" />
-
-        <Button
-            android:id="@+id/btnAnnounce"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/btn_announce"
-            android:layout_marginBottom="24dp" />
-
-        <!-- ══════════════════════════════════════
-             accessibilityLiveRegion
-             ══════════════════════════════════════
-             accessibilityLiveRegion="polite" tells TalkBack to
-             automatically re-read this TextView whenever its text changes —
-             without the user having to focus on it again.
-
-             "polite"  → waits for current speech to finish, then announces
-             "assertive" → interrupts current speech immediately (use sparingly)
-             "none"    → default; TalkBack won't re-read on change
-        -->
-        <TextView
-            android:id="@+id/tvStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/label_live_region"
-            android:textSize="18sp"
-            android:padding="12dp"
-            android:background="#E8F5E9"
-            android:accessibilityLiveRegion="polite" />
-
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>

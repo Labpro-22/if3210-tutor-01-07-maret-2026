@@ -1,64 +1,71 @@
 package com.example.tutor
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.view.accessibility.AccessibilityEvent
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
 
 /**
- * Branch 04 — Accessibility
+ * Branch 05 — Activities and Intents
  *
- * Android's accessibility system lets users with visual or motor impairments
- * use your app via TalkBack (screen reader) or Switch Access.
+ * An Intent is a message object that describes an operation to perform.
+ * Two kinds:
  *
- * TalkBack reads aloud:
- *   • android:contentDescription  → for ImageView, ImageButton, etc.
- *   • android:hint / android:text → for EditText and TextView
- *   • android:labelFor            → links a label TextView to an EditText so
- *                                   TalkBack reads "Your name — edit box"
+ * ① Explicit Intent — you name the exact class to start.
+ *   Used to navigate between screens in YOUR OWN app.
+ *   Example: start SecondActivity and hand it the user's name.
  *
- * When content changes dynamically (e.g. a status message updates), you must
- * tell TalkBack to re-read it using:
- *   view.announceForAccessibility("message")
- *   — OR —
- *   android:accessibilityLiveRegion="polite" in XML (Android handles it automatically)
+ * ② Implicit Intent — you describe the ACTION and data, and Android
+ *   picks the right app to handle it (email client, browser, maps, …).
+ *   Your app doesn't need to know which app handles it.
+ *
+ * Step 5a: Explicit intent → SecondActivity
+ * Step 5b: Implicit intent → email client
  */
 class MainActivity : AppCompatActivity() {
+
+    // Key used to attach/retrieve the extra — define it as a constant to avoid typos
+    companion object {
+        const val EXTRA_NAME = "com.example.tutor.EXTRA_NAME"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val ivLogo: ImageView   = findViewById(R.id.ivLogo)
-        val etName: EditText    = findViewById(R.id.etName)
-        val btnSubmit: Button   = findViewById(R.id.btnSubmit)
-        val tvStatus: TextView  = findViewById(R.id.tvStatus)
-        val btnAnnounce: Button = findViewById(R.id.btnAnnounce)
+        val etName: EditText = findViewById(R.id.etName)
 
-        // contentDescription can also be set in code (same effect as XML attribute)
-        // Useful when the description depends on dynamic data
-        ivLogo.contentDescription = getString(R.string.cd_logo)
+        // ── 5a: Explicit Intent ────────────────────────────────────────────
+        findViewById<Button>(R.id.btnOpenSecond).setOnClickListener {
+            // Create an intent that explicitly targets SecondActivity
+            val intent = Intent(this, SecondActivity::class.java)
 
-        // Submit: update status TextView — TalkBack reads it because of liveRegion
-        btnSubmit.setOnClickListener {
-            val name = etName.text.toString().trim()
-            tvStatus.text = if (name.isNotEmpty()) "Hello, $name! 👋" else "Please enter your name."
-            // No extra code needed — accessibilityLiveRegion="polite" in XML handles it
+            // Attach data using putExtra(key, value)
+            // The key is just a string; using a package-qualified name avoids collisions
+            intent.putExtra(EXTRA_NAME, etName.text.toString().trim())
+
+            // Start the activity — Android pushes SecondActivity onto the back stack
+            startActivity(intent)
         }
 
-        // announceForAccessibility: explicitly pushes a message to TalkBack
-        // Use this when you want to announce something that isn't in a live region
-        btnAnnounce.setOnClickListener {
-            val name = etName.text.toString().trim()
-            val message = if (name.isNotEmpty()) "Greeting sent to $name" else "No name entered"
-            // This queues the string to be spoken by the screen reader immediately
-            tvStatus.announceForAccessibility(message)
-            tvStatus.text = message
+        // ── 5b: Implicit Intent — email ────────────────────────────────────
+        findViewById<Button>(R.id.btnEmail).setOnClickListener {
+            // ACTION_SENDTO + "mailto:" URI targets email clients specifically.
+            // (ACTION_SEND would also match Bluetooth, messaging apps, etc.)
+            val intent = Intent(Intent.ACTION_SENDTO).apply {
+                data = Uri.parse("mailto:")                   // only email apps handle this
+                putExtra(Intent.EXTRA_EMAIL, arrayOf("lecturer@university.ac.id"))
+                putExtra(Intent.EXTRA_SUBJECT, "Android Tutorial Question")
+                putExtra(Intent.EXTRA_TEXT, "Hi,\n\nI have a question about the Android tutorial.\n\nRegards,\n${etName.text}")
+            }
+
+            // resolveActivity checks whether ANY app can handle this intent
+            // before we call startActivity() — avoids a crash if no email app is installed
+            if (intent.resolveActivity(packageManager) != null) {
+                startActivity(intent)
+            }
         }
     }
 }
