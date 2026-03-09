@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         // --- Counter button ---
         btnCounter.setOnClickListener {
             clickCount++                              // increment our in-memory counter
-            tvCounter.text = "Clicked: $clickCount"  // update the label
+            tvCounter.text = getString(R.string.clicked, clickCount)  // update the label
         }
     }
 }

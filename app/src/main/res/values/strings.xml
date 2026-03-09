@@ -6,4 +6,5 @@
     <string name="btn_click">Click Me!</string>
     <string name="label_greeting">Press the button to greet!</string>
     <string name="label_counter">Clicked: 0</string>
+    <string name="clicked">Clicked: %1$d</string>
 </resources>
