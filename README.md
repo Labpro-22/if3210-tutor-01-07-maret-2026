@@ -1,28 +1,100 @@
-# Android Basics Tutorial
+# Branch 02 — Layouts
 
-University tutorial project demonstrating Android fundamentals, organized into numbered Git branches.
+> Part of the [IF3210 Mobile App Development — Tutorial 1](../../tree/main) series.
 
-## Branches
+This branch demonstrates the three most important Android layout containers and when to use each one.
 
-| Branch | Topic |
-|--------|-------|
-| `01-basic-views` | TextView, EditText, Button, ImageView + click counter |
-| `02-layouts` | LinearLayout, FrameLayout, ConstraintLayout |
-| `03-resources` | strings.xml, dimens.xml, drawables, R class |
-| `04-accessibility` | contentDescription, labelFor, announceForAccessibility |
-| `05-activities-and-intents` | Explicit + implicit Intents, passing data |
-| `06-content-provider` | ContactsContract + RecyclerView + runtime permissions |
+---
 
-## Setup
+## What You'll Learn
 
-1. Clone the repo
-2. Open in **Android Studio Hedgehog (2023.1)** or newer
-3. Check out the branch you want: `git checkout 01-basic-views`
-4. Let Android Studio sync Gradle
-5. Run on an emulator (minSdk 24 / API 24+)
+| Layout | Description |
+|--------|-------------|
+| `LinearLayout` | Stack views in a single row or column; use `layout_weight` to distribute space |
+| `FrameLayout` | Layer views on top of each other; useful for overlays and fragments |
+| `ConstraintLayout` | Position views relative to each other or the parent; zero nesting needed |
 
-## Requirements
+---
 
-- minSdk 24, targetSdk 34
-- Kotlin, XML layouts (no Jetpack Compose)
-- AndroidX only, no third-party libraries (except RecyclerView/CardView in branch 06)
+## Key Files
+
+```
+app/src/main/
+├── java/com/example/tutor/
+│   └── MainActivity.kt
+└── res/layout/
+    ├── activity_main.xml        ← ConstraintLayout root with tab buttons
+    ├── fragment_linear.xml      ← LinearLayout demo
+    ├── fragment_frame.xml       ← FrameLayout demo
+    └── fragment_constraint.xml  ← ConstraintLayout demo
+```
+
+---
+
+## LinearLayout — Stack & Weight
+
+```xml
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- layout_weight="1" means "take an equal share of remaining space" -->
+    <Button android:layout_weight="1" ... />
+    <Button android:layout_weight="2" ... />   <!-- twice as tall -->
+</LinearLayout>
+```
+
+**Use when:** you have a simple list of views all going the same direction.
+
+---
+
+## FrameLayout — Layering
+
+```xml
+<FrameLayout ...>
+    <ImageView ... />               <!-- bottom layer -->
+    <TextView
+        android:gravity="center"    <!-- centered on top of the image -->
+        ... />
+</FrameLayout>
+```
+
+**Use when:** you need to overlay views (badge on icon, loading spinner over content).
+
+---
+
+## ConstraintLayout — Relative Positioning
+
+```xml
+<androidx.constraintlayout.widget.ConstraintLayout ...>
+    <Button
+        android:id="@+id/btnA"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" ... />
+
+    <TextView
+        <!-- place this view directly below btnA -->
+        app:layout_constraintTop_toBottomOf="@id/btnA" ... />
+</androidx.constraintlayout.widget.ConstraintLayout>
+```
+
+**Use when:** you have a complex UI and want to avoid deep nesting. This is the default layout in new Android Studio projects.
+
+---
+
+## Things to Try
+
+- In the LinearLayout demo, change `layout_weight` values and observe how space is redistributed
+- In the FrameLayout demo, add a semi-transparent colored `View` over the image
+- In the ConstraintLayout demo, add a new `TextView` and chain it to an existing view
+
+---
+
+## Next Branch
+
+`03-resources` — learn how `strings.xml`, `dimens.xml`, and the `R` class keep your code clean and localisation-ready.
+
+```bash
+git checkout 03-resources
+```
